@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream</title>
+    <style>
+        .toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .toggle b {
+            margin: 0;
+            color: black;
+            padding: 20px;
+            font-size: 20px;
+        }
+      
+        .toggle-label {
+            display: inline-block;
+            width: 80px;
+            height: 50px; 
+            background-color: #ccc;
+            border-radius: 35px; 
+            position: relative;
+            cursor: pointer;
+            overflow: hidden; 
+        }
+     
+        .toggle-indicator {
+            position: absolute;
+            top: 12%;
+            transform: translateY(-50%);
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            transition: transform 0.3s ease, background-color 0.3s ease; 
+        }
+
+        .toggle-checkbox:not(:checked) + .toggle-label .toggle-indicator {
+            background-color: red; 
+            transform: translateX(0); 
+        }
+
+        .toggle-checkbox:checked + .toggle-label .toggle-indicator {
+            background-color: green;
+            transform: translateX(100%); 
+        }
+
+        .header {
+            position: relative;
+            justify-content: center;
+            font-size: x-large;
+            margin-bottom: 10px;
+            width: 100%;
+            height: 120px;
+            background-color: #0A192F;
+            color: white;
+        }
+
+      
+        body {
+            
+            color: rgb(0, 0, 0);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            background-color: whitesmoke;
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            justify-content: center; 
+            align-items: center; 
+            font-family: Arial, sans-serif;
+            
+            display: flex;
+            flex-direction: column;
+            height: 100v;
+        }
+
+        .toggle-checkbox {
+            display: none;
+        }
+      
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <h1>Face Detection</h1>
+    </div>
+    <div class="htf">
+        <div>
+            <div class="toggle">
+                <b>Stop Detection</b>
+                <input type="checkbox" id="unitToggle" class="toggle-checkbox" onchange="toggleUnits()">
+                <label for="unitToggle" class="toggle-label">
+                    <div class="toggle-indicator"></div>
+                </label>
+                <b>Start Detection</b>
+            </div>
+        </div>
+         
+    </div>
+    <div class="video-container">
+        <div>
+            <img id="video-stream" src="{{ url_for('video_feed') }}" alt="Video Stream">
+        </div>
+    </div>
+
+</body>
+<script>
+
+
+    function toggleUnits() {
+        var unitToggle = document.getElementById("unitToggle");
+
+        if (unitToggle.checked) {
+            fetch('/start_monitoring')
+                .then(response => {
+                if (response.ok) {
+                    console.log("Monitoring started successfully");
+    
+                }
+            });
+        } 
+        else {
+            fetch('/stop_monitoring')
+                .then(response => response.json())
+                .then(data => {
+            console.log("STOP");
+        });
+    }
+}
+</script>
+</html>
